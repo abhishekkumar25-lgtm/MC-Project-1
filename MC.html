@@ -1,0 +1,2114 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Labs | Double and Triple Integration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #2c3e50;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+            color: #64b5f6;
+        }
+
+        .logo h1 {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-subtitle {
+            font-size: 0.72rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        .nav-tabs {
+            list-style: none;
+            padding: 15px 0;
+            flex: 1;
+        }
+
+        .nav-tab {
+            padding: 13px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            transition: all 0.25s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.1);
+            border-left-color: rgba(255,255,255,0.4);
+        }
+
+        .nav-tab.active {
+            background: rgba(255,255,255,0.18);
+            border-left-color: #64b5f6;
+            font-weight: 600;
+        }
+
+        .nav-tab i {
+            width: 18px;
+            text-align: center;
+            font-size: 0.95rem;
+            opacity: 0.85;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        #section-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e3c72;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .content-area {
+            padding: 30px;
+            flex: 1;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #1e3c72;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #2a5298;
+            font-weight: 700;
+        }
+
+        /* Aim Section */
+        .aim-content {
+            font-size: 1.05rem;
+        }
+
+        .aim-content h3 {
+            color: #2c3e50;
+            margin: 20px 0 10px;
+        }
+
+        .aim-content ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .aim-content li {
+            margin-bottom: 8px;
+        }
+
+        /* Theory Section Styles */
+        .theory-section {
+            background: #f8f9fa;
+            padding: 28px;
+            border-radius: 10px;
+            margin-bottom: 28px;
+            border-left: 5px solid #1e5799;
+        }
+
+        .theory-section h3 {
+            color: #1e3c72;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #eaeaea;
+            font-size: 1.4rem;
+        }
+
+        .theory-section p {
+            margin-bottom: 14px;
+            line-height: 1.8;
+            color: #2c3e50;
+        }
+
+        .theory-section ul, .theory-section ol {
+            margin-left: 28px;
+            margin-bottom: 18px;
+        }
+
+        .theory-section li {
+            margin-bottom: 9px;
+            line-height: 1.6;
+        }
+
+        .example-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            margin: 18px 0;
+        }
+
+        .example-box h4 {
+            color: #1e5799;
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+
+        .equation {
+            font-family: 'Courier New', monospace;
+            background: #f0f4f8;
+            padding: 14px;
+            border-radius: 6px;
+            margin: 12px 0;
+            border-left: 4px solid #3498db;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Simulation Section */
+        .simulation-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .input-panel, .results-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+        }
+
+        .input-panel h3, .results-panel h3 {
+            font-size: 1.1rem;
+            color: #1e3c72;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 13px;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.25s;
+            font-family: 'Courier New', monospace;
+            background: #fafafa;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #2a5298;
+            background: white;
+        }
+
+        .limits-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .limit-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .limit-group label {
+            font-size: 0.82rem;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+
+        .limit-group input {
+            padding: 8px 10px;
+            border: 1.5px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            background: #fafafa;
+            width: 100%;
+        }
+
+        .limit-group input:focus {
+            outline: none;
+            border-color: #2a5298;
+            background: white;
+        }
+
+        .limit-group .hint {
+            font-size: 0.72rem;
+            color: #27ae60;
+            font-style: italic;
+        }
+
+        .limits-block {
+            background: #f0f7ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #c9dff5;
+        }
+
+        .limits-block h4 {
+            color: #1e5799;
+            font-size: 0.92rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Control Buttons */
+        .control-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+
+        .btn:hover::before { left: 100%; }
+
+        .btn-solve {
+            background: linear-gradient(to right, #1e5799, #2980b9);
+            color: white;
+            flex: 2;
+            box-shadow: 0 4px 15px rgba(30,87,153,0.3);
+            animation: gentleGlow 3s infinite ease-in-out;
+        }
+
+        .btn-example {
+            background: linear-gradient(to right, #27ae60, #2ecc71);
+            color: white;
+            flex: 1;
+            animation: gentleGlowGreen 3s infinite ease-in-out 0.5s;
+        }
+
+        .btn-reset {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+            flex: 1;
+            animation: gentleGlowRed 3s infinite ease-in-out 1s;
+        }
+
+        .btn:hover { transform: translateY(-3px); }
+        .btn:active { transform: translateY(-1px); }
+
+        @keyframes gentleGlow {
+            0%, 100% { box-shadow: 0 4px 15px rgba(30,87,153,0.3); }
+            50% { box-shadow: 0 4px 20px rgba(30,87,153,0.5), 0 0 15px rgba(52,152,219,0.4); }
+        }
+        @keyframes gentleGlowGreen {
+            0%, 100% { box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
+            50% { box-shadow: 0 4px 20px rgba(39,174,96,0.5), 0 0 15px rgba(46,204,113,0.4); }
+        }
+        @keyframes gentleGlowRed {
+            0%, 100% { box-shadow: 0 4px 15px rgba(231,76,60,0.3); }
+            50% { box-shadow: 0 4px 20px rgba(231,76,60,0.5), 0 0 15px rgba(231,76,60,0.4); }
+        }
+
+        .submit-btn {
+            background: linear-gradient(to right, #1e5799, #2980b9);
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(30,87,153,0.3);
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            animation: submitGlow 3s infinite ease-in-out;
+        }
+
+        .submit-btn:hover { transform: translateY(-3px); }
+
+        @keyframes submitGlow {
+            0%, 100% { box-shadow: 0 4px 15px rgba(30,87,153,0.3); }
+            50% { box-shadow: 0 4px 20px rgba(30,87,153,0.5), 0 0 15px rgba(52,152,219,0.4); }
+        }
+
+        /* Results */
+        .results-container {
+            height: 100%;
+        }
+
+        .solution-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            margin-bottom: 18px;
+        }
+
+        .status-success { background: #d5f4e6; color: #27ae60; }
+        .status-error { background: #fadbd8; color: #e74c3c; }
+        .status-infinite { background: #fdebd0; color: #f39c12; }
+
+        .solution-display {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 140px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.92rem;
+            line-height: 1.7;
+        }
+
+        .result-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1e3c72;
+            margin: 12px 0;
+        }
+
+        .result-label {
+            font-size: 0.82rem;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+
+        /* Steps display */
+        .steps-container {
+            margin-top: 20px;
+        }
+
+        .step {
+            background: white;
+            border-left: 4px solid #2a5298;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+        }
+
+        .step-title {
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 5px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Matrix Properties */
+        .props-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .prop-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .prop-label {
+            font-size: 0.78rem;
+            color: #7f8c8d;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .prop-value {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+
+        /* Graphical */
+        .graphical-container {
+            background: #f8f9fa;
+            padding: 22px;
+            border-radius: 10px;
+            margin-top: 22px;
+        }
+
+        .graphical-container h3 {
+            font-size: 1.1rem;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .graph-canvas {
+            width: 100%;
+            height: 280px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #bdc3c7;
+        }
+
+        .graph-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+        }
+
+        .legend-color {
+            width: 28px;
+            height: 10px;
+            border-radius: 3px;
+        }
+        .color-line1 { background-color: #e74c3c; }
+        .color-line2 { background-color: #3498db; }
+        .color-solution { background-color: #f39c12; }
+        .color-area { background-color: rgba(41,128,185,0.3); }
+
+        /* Pretest / Posttest Styles */
+        .question-container {
+            background: #f8f9fa;
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 22px;
+            border-left: 5px solid #3498db;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeaea;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-left: 15px;
+        }
+
+        .option {
+            padding: 11px 18px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .option:hover { border-color: #3498db; background: #ebf5fb; }
+        .option.selected { border-color: #27ae60; background: #d5f4e6; }
+
+        .option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .answer-feedback {
+            margin-top: 13px;
+            padding: 13px;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .feedback-correct {
+            background-color: #d5f4e6;
+            border-left: 5px solid #27ae60;
+            color: #1a7a4a;
+        }
+
+        .feedback-incorrect {
+            background-color: #fdebd0;
+            border-left: 5px solid #f39c12;
+            color: #7d5a00;
+        }
+
+        /* References */
+        .reference-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            border-left: 5px solid #9b59b6;
+        }
+
+        .reference-item h4 { color: #1e3c72; margin-bottom: 8px; }
+
+        /* Contributors */
+        .contributors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 22px;
+            margin-top: 22px;
+        }
+
+        .contributor-card {
+            background: #f8f9fa;
+            padding: 22px;
+            border-radius: 10px;
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contributor-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .contributor-card::before {
+            content: '';
+            position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s; z-index: 1;
+        }
+
+        .contributor-card:hover::before { left: 100%; }
+
+        .guide-card   { border-left-color: #e74c3c; box-shadow: 0 4px 15px rgba(231,76,60,0.1); }
+        .leader-card  { border-left-color: #3498db; box-shadow: 0 4px 15px rgba(52,152,219,0.1); }
+        .team-card    { border-left-color: #2ecc71; box-shadow: 0 4px 15px rgba(46,204,113,0.1); }
+
+        .contributor-card h3 { color: #1e3c72; margin-bottom: 8px; font-size: 1.2rem; }
+
+        .contributor-role {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 13px;
+        }
+
+        .role-guide  { background-color: #fadbd8; color: #e74c3c; }
+        .role-leader { background-color: #d6eaf8; color: #3498db; }
+        .role-member { background-color: #d5f4e6; color: #27ae60; }
+
+        /* Feedback */
+        .feedback-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .feedback-content textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            resize: vertical;
+            margin-bottom: 18px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .feedback-content textarea:focus { outline: none; border-color: #2a5298; }
+
+        /* Score circle */
+        .score-circle {
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e5799, #2980b9);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+
+        .score-value { font-size: 1.4rem; font-weight: 700; }
+        .score-label { font-size: 0.72rem; opacity: 0.85; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar { width: 220px; }
+            .main-content { margin-left: 220px; }
+            .simulation-container { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .main-content { margin-left: 0; }
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.7; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .pulse { animation: pulse 2s infinite; }
+
+        @keyframes highlightSolution {
+            0% { background: #fff9c4; }
+            100% { background: transparent; }
+        }
+
+        .highlight { animation: highlightSolution 0.5s ease; }
+
+        /* Integration specific */
+        .integral-symbol {
+            font-size: 2.5rem;
+            color: #1e3c72;
+            line-height: 1;
+        }
+
+        .integral-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border-radius: 10px;
+            padding: 18px;
+            border: 2px solid #e0e0e0;
+            margin-bottom: 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        .variable-badge {
+            display: inline-block;
+            background: #e8f4fd;
+            border: 1px solid #3498db;
+            color: #1e5799;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .section-divider {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #1e3c72, transparent);
+            margin: 25px 0;
+            border-radius: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-integral"></i>
+            <h1>Virtual Labs</h1>
+            <div class="logo-subtitle">Numerical Methods — Double & Triple Integration</div>
+        </div>
+
+        <ul class="nav-tabs">
+            <li class="nav-tab active" data-tab="aim">
+                <i class="fas fa-bullseye"></i>Aim
+            </li>
+            <li class="nav-tab" data-tab="pretest">
+                <i class="fas fa-clipboard-check"></i>Pretest
+            </li>
+            <li class="nav-tab" data-tab="theory">
+                <i class="fas fa-book"></i>Theory
+            </li>
+            <li class="nav-tab" data-tab="simulation">
+                <i class="fas fa-calculator"></i>Simulation
+            </li>
+            <li class="nav-tab" data-tab="posttest">
+                <i class="fas fa-graduation-cap"></i>Posttest
+            </li>
+            <li class="nav-tab" data-tab="references">
+                <i class="fas fa-bookmark"></i>References
+            </li>
+            <li class="nav-tab" data-tab="contributors">
+                <i class="fas fa-users"></i>Contributors
+            </li>
+            <li class="nav-tab" data-tab="feedback">
+                <i class="fas fa-comment-alt"></i>Feedback
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-bar">
+            <h2 id="section-header">Double and Triple Integration</h2>
+            <div class="top-bar-actions">
+                <i class="fas fa-university"></i> Virtual Labs &nbsp;|&nbsp;
+                <i class="fas fa-calendar"></i> Numerical Methods
+            </div>
+        </div>
+
+        <div class="content-area">
+
+            <!-- AIM SECTION -->
+            <section id="aim" class="content-section active">
+                <h2 class="section-title">Double and Triple Integration</h2>
+                <div class="aim-content">
+                    <h3>AIM: To compute Double and Triple Integrals numerically and analytically</h3>
+                    <p>This experiment provides a comprehensive understanding of methods for evaluating double and triple integrals — fundamental techniques in multi-variable calculus and numerical methods — with support for both constant and variable limits of integration.</p>
+                    <p>Understanding iterated integration, changing the order of integration, and geometric interpretations are crucial skills for engineering, physics, and data science applications.</p>
+
+                    <h3>Learning Objectives:</h3>
+                    <ul>
+                        <li>Understand double integrals ∬f(x,y) dA and their geometric meaning (volume under a surface)</li>
+                        <li>Understand triple integrals ∭f(x,y,z) dV and their physical interpretations</li>
+                        <li>Apply iterated integration with both constant and variable limits</li>
+                        <li>Change the order of integration using Fubini's theorem</li>
+                        <li>Solve integrals over non-rectangular regions using variable limits</li>
+                    </ul>
+
+                    <h3>Applications:</h3>
+                    <ul>
+                        <li>Engineering: Area, volume, mass, center of mass, moment of inertia</li>
+                        <li>Physics: Flux, charge distribution, probability density functions</li>
+                        <li>Computer Graphics: Rendering equations, light transport</li>
+                        <li>Data Science: Multivariate probability distributions, marginal densities</li>
+                        <li>Machine Learning: Expectation over joint distributions</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- PRETEST SECTION -->
+            <section id="pretest" class="content-section">
+                <h2 class="section-title">Pretest — Assess Your Prerequisite Knowledge</h2>
+                <div class="pretest-content">
+
+                    <div class="question-container">
+                        <div class="question">
+                            <div class="question-text">Question 1: What does a double integral ∬f(x,y) dA represent geometrically?</div>
+                            <div class="options">
+                                <label class="option"><input type="radio" name="q1" value="a"> The length of a curve</label>
+                                <label class="option"><input type="radio" name="q1" value="b"> The volume under a surface f(x,y) above the region A</label>
+                                <label class="option"><input type="radio" name="q1" value="c"> The slope of a surface</label>
+                                <label class="option"><input type="radio" name="q1" value="d"> The area of a cross-section</label>
+                            </div>
+                            <div id="q1-feedback" class="answer-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question">
+                            <div class="question-text">Question 2: In an iterated integral ∫∫f(x,y) dy dx, which variable is integrated first?</div>
+                            <div class="options">
+                                <label class="option"><input type="radio" name="q2" value="a"> x</label>
+                                <label class="option"><input type="radio" name="q2" value="b"> y</label>
+                                <label class="option"><input type="radio" name="q2" value="c"> Both simultaneously</label>
+                                <label class="option"><input type="radio" name="q2" value="d"> Neither — they are done together</label>
+                            </div>
+                            <div id="q2-feedback" class="answer-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question">
+                            <div class="question-text">Question 3: Evaluate ∫<sub>0</sub><sup>1</sup> (2x + 3) dx</div>
+                            <div class="options">
+                                <label class="option"><input type="radio" name="q3" value="a"> 4</label>
+                                <label class="option"><input type="radio" name="q3" value="b"> 5</label>
+                                <label class="option"><input type="radio" name="q3" value="c"> 3</label>
+                                <label class="option"><input type="radio" name="q3" value="d"> 2</label>
+                            </div>
+                            <div id="q3-feedback" class="answer-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question">
+                            <div class="question-text">Question 4: For the integral ∫₀¹ ∫₀ˣ f(x,y) dy dx, which limits are variable?</div>
+                            <div class="options">
+                                <label class="option"><input type="radio" name="q4" value="a"> Both limits are constant</label>
+                                <label class="option"><input type="radio" name="q4" value="b"> The outer limits (0 to 1) are variable</label>
+                                <label class="option"><input type="radio" name="q4" value="c"> The inner limits (0 to x) are variable — they depend on x</label>
+                                <label class="option"><input type="radio" name="q4" value="d"> None are variable</label>
+                            </div>
+                            <div id="q4-feedback" class="answer-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question">
+                            <div class="question-text">Question 5: The triple integral ∭ dV over a region R gives:</div>
+                            <div class="options">
+                                <label class="option"><input type="radio" name="q5" value="a"> The surface area of R</label>
+                                <label class="option"><input type="radio" name="q5" value="b"> The mass of R</label>
+                                <label class="option"><input type="radio" name="q5" value="c"> The volume of R</label>
+                                <label class="option"><input type="radio" name="q5" value="d"> The perimeter of R</label>
+                            </div>
+                            <div id="q5-feedback" class="answer-feedback"></div>
+                        </div>
+                    </div>
+
+                    <button class="submit-btn" id="submit-pretest">
+                        <i class="fas fa-paper-plane"></i> Submit Pretest
+                    </button>
+                    <div id="pretest-results" style="display:none; margin-top:20px;"></div>
+                </div>
+            </section>
+
+            <!-- THEORY SECTION -->
+            <section id="theory" class="content-section">
+                <h2 class="section-title">Theory of Double and Triple Integration</h2>
+
+                <div class="theory-section">
+                    <h3><i class="fas fa-calculator"></i> Double Integrals</h3>
+                    <p>A double integral extends the concept of a single integral to functions of two variables. Given f(x,y) defined over a region R in the xy-plane, the double integral is:</p>
+                    <div class="equation">∬<sub>R</sub> f(x,y) dA = lim<sub>n→∞</sub> Σ f(xᵢ,yⱼ) ΔA</div>
+                    <p>Geometrically, if f(x,y) ≥ 0, the double integral gives the volume of the solid between the surface z = f(x,y) and the region R in the xy-plane.</p>
+
+                    <div class="example-box">
+                        <h4>Rectangular Region (constant limits)</h4>
+                        <div class="equation">
+                            ∫<sub>a</sub><sup>b</sup> ∫<sub>c</sub><sup>d</sup> f(x,y) dy dx<br><br>
+                            Inner integral: integrate f(x,y) w.r.t. y from c to d<br>
+                            Outer integral: integrate result w.r.t. x from a to b
+                        </div>
+                    </div>
+
+                    <div class="example-box">
+                        <h4>Non-Rectangular Region (variable limits)</h4>
+                        <p>When the region is bounded by curves, limits of the inner integral depend on the outer variable:</p>
+                        <div class="equation">
+                            ∫<sub>a</sub><sup>b</sup> ∫<sub>g₁(x)</sub><sup>g₂(x)</sup> f(x,y) dy dx<br><br>
+                            Example: ∫₀¹ ∫₀ˣ (x + y) dy dx<br>
+                            Inner limits: y from 0 to x  (variable upper limit)<br>
+                            Outer limits: x from 0 to 1  (constant)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theory-section">
+                    <h3><i class="fas fa-cube"></i> Triple Integrals</h3>
+                    <p>A triple integral extends the concept to functions of three variables f(x,y,z) over a 3D region E:</p>
+                    <div class="equation">∭<sub>E</sub> f(x,y,z) dV = ∫∫∫ f(x,y,z) dz dy dx</div>
+
+                    <div class="example-box">
+                        <h4>Constant Limits (Rectangular Box)</h4>
+                        <div class="equation">
+                            ∫<sub>a</sub><sup>b</sup> ∫<sub>c</sub><sup>d</sup> ∫<sub>e</sub><sup>f</sup> f(x,y,z) dz dy dx<br><br>
+                            Example: ∫₀¹ ∫₀¹ ∫₀¹ xyz dz dy dx = 1/8
+                        </div>
+                    </div>
+
+                    <div class="example-box">
+                        <h4>Variable Limits</h4>
+                        <p>Limits can be functions of outer variables — the innermost variable has limits depending on both outer variables:</p>
+                        <div class="equation">
+                            ∫<sub>a</sub><sup>b</sup> ∫<sub>g₁(x)</sub><sup>g₂(x)</sup> ∫<sub>h₁(x,y)</sub><sup>h₂(x,y)</sup> f(x,y,z) dz dy dx<br><br>
+                            Example: ∫₀¹ ∫₀ˣ ∫₀ˣ⁺ʸ dz dy dx<br>
+                            Inner z-limits: 0 to x+y (function of x and y)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theory-section">
+                    <h3><i class="fas fa-exchange-alt"></i> Changing the Order of Integration</h3>
+                    <p>By Fubini's Theorem, for continuous functions on a bounded region, the order of integration can be reversed. This is often useful when one order is easier to evaluate.</p>
+                    <div class="example-box">
+                        <div class="equation">
+                            Original: ∫₀¹ ∫ₓ¹ f(x,y) dy dx<br>
+                            Region R: 0 ≤ x ≤ 1, x ≤ y ≤ 1<br><br>
+                            Reversed: ∫₀¹ ∫₀ʸ f(x,y) dx dy<br>
+                            Region R: 0 ≤ y ≤ 1, 0 ≤ x ≤ y
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theory-section">
+                    <h3><i class="fas fa-chart-bar"></i> Coordinate Systems</h3>
+                    <ul>
+                        <li><strong>Cartesian (x,y,z):</strong> Standard; dV = dx dy dz</li>
+                        <li><strong>Polar (r,θ):</strong> For circular regions; dA = r dr dθ</li>
+                        <li><strong>Cylindrical (r,θ,z):</strong> For cylindrical regions; dV = r dz dr dθ</li>
+                        <li><strong>Spherical (ρ,φ,θ):</strong> For spherical regions; dV = ρ² sin(φ) dρ dφ dθ</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SIMULATION SECTION -->
+            <section id="simulation" class="content-section">
+                <h2 class="section-title">Simulation — Evaluate Double & Triple Integrals</h2>
+
+                <div class="simulation-container">
+                    <!-- Input Panel -->
+                    <div class="input-panel">
+                        <h3><i class="fas fa-sliders-h"></i> Integration Configuration</h3>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-layer-group"></i> Integration Type</label>
+                            <select id="integral-type" onchange="updateIntegralUI()">
+                                <option value="double">Double Integral ∬ f(x,y) dA</option>
+                                <option value="triple">Triple Integral ∭ f(x,y,z) dV</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-function"></i> Integrand f</label>
+                            <input type="text" id="integrand" placeholder="e.g. x*y, x^2 + y^2, x*y*z" value="x*y">
+                            <small style="color:#7f8c8d; font-size:0.78rem;">Supported: +, -, *, /, ^, sin, cos, exp, sqrt</small>
+                        </div>
+
+                        <hr class="section-divider">
+
+                        <!-- X limits -->
+                        <div class="limits-block">
+                            <h4><i class="fas fa-arrows-alt-h"></i> x — Outer limits (constants only)</h4>
+                            <div class="limits-row">
+                                <div class="limit-group">
+                                    <label>Lower x (a)</label>
+                                    <input type="text" id="x-lower" placeholder="0" value="0">
+                                    <span class="hint">constant, e.g. 0, -1, pi</span>
+                                </div>
+                                <div class="limit-group">
+                                    <label>Upper x (b)</label>
+                                    <input type="text" id="x-upper" placeholder="1" value="1">
+                                    <span class="hint">constant, e.g. 1, 2, pi</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Y limits -->
+                        <div class="limits-block">
+                            <h4><i class="fas fa-arrows-alt-v"></i> y — Inner limits (may depend on x)</h4>
+                            <div class="limits-row">
+                                <div class="limit-group">
+                                    <label>Lower y (c or g₁(x))</label>
+                                    <input type="text" id="y-lower" placeholder="0" value="0">
+                                    <span class="hint">can use x, e.g. 0, x, x^2</span>
+                                </div>
+                                <div class="limit-group">
+                                    <label>Upper y (d or g₂(x))</label>
+                                    <input type="text" id="y-upper" placeholder="x" value="x">
+                                    <span class="hint">can use x, e.g. 1, x, sqrt(x)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Z limits — only shown for triple -->
+                        <div class="limits-block" id="z-limits-block" style="display:none;">
+                            <h4><i class="fas fa-layer-group"></i> z — Innermost limits (may depend on x and y)</h4>
+                            <div class="limits-row">
+                                <div class="limit-group">
+                                    <label>Lower z (or h₁(x,y))</label>
+                                    <input type="text" id="z-lower" placeholder="0" value="0">
+                                    <span class="hint">can use x, y, e.g. 0, x+y, x*y</span>
+                                </div>
+                                <div class="limit-group">
+                                    <label>Upper z (or h₂(x,y))</label>
+                                    <input type="text" id="z-upper" placeholder="1" value="1">
+                                    <span class="hint">can use x, y, e.g. 1, x+y, x^2+y^2</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-buttons">
+                            <button class="btn btn-solve" onclick="computeIntegral()">
+                                <i class="fas fa-play"></i> Compute Integral
+                            </button>
+                            <button class="btn btn-example" onclick="loadExample()">
+                                <i class="fas fa-lightbulb"></i> Example
+                            </button>
+                            <button class="btn btn-reset" onclick="resetAll()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Results Panel -->
+                    <div class="results-panel">
+                        <h3><i class="fas fa-chart-bar"></i> Results</h3>
+
+                        <div id="solution-status" class="solution-status">
+                            <i class="fas fa-circle"></i> Ready
+                        </div>
+
+                        <!-- Integral notation display -->
+                        <div id="integral-notation" class="integral-display" style="display:none;">
+                        </div>
+
+                        <div id="solution-display" class="solution-display">
+                            <p style="text-align:center; color:#bdc3c7; padding:30px 10px;">
+                                <i class="fas fa-integral" style="font-size:2.5rem; display:block; margin-bottom:12px;"></i>
+                                Configure the integral and click "Compute Integral" to see the result
+                            </p>
+                        </div>
+
+                        <div id="steps-container" class="steps-container"></div>
+
+                        <div class="props-grid" id="props-grid">
+                            <div class="prop-item">
+                                <div class="prop-label">Type</div>
+                                <div class="prop-value" id="prop-type">—</div>
+                            </div>
+                            <div class="prop-item">
+                                <div class="prop-label">Method</div>
+                                <div class="prop-value" id="prop-method">Midpoint Rule</div>
+                            </div>
+                            <div class="prop-item">
+                                <div class="prop-label">Variable Limits</div>
+                                <div class="prop-value" id="prop-varlimits">—</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graphical Representation -->
+                <div class="graphical-container">
+                    <h3><i class="fas fa-chart-area"></i> Graphical Representation</h3>
+                    <div class="graph-canvas" id="graph-canvas">
+                        <div class="graph-placeholder" id="graph-placeholder">
+                            <i class="fas fa-chart-area" style="font-size:2.5rem; margin-bottom:12px;"></i>
+                            <p>Integration region and function will appear here</p>
+                        </div>
+                    </div>
+                    <div class="graph-legend" id="graph-legend"></div>
+                </div>
+            </section>
+
+            <!-- POSTTEST SECTION -->
+            <section id="posttest" class="content-section">
+                <h2 class="section-title">Posttest — Practical Problem Solving</h2>
+                <div class="posttest-content">
+                    <p>Complete this posttest to evaluate your understanding of double and triple integration.</p>
+
+                    <div class="question-container">
+                        <div class="question">
+                            <div class="question-text">Problem 1: Evaluate ∫₀¹ ∫₀¹ (x + y) dy dx</div>
+                            <div class="options">
+                                <label class="option"><input type="radio" name="p1" value="a"> 1</label>
+                                <label class="option"><input type="radio" name="p1" value="b"> 1/2</label>
+                                <label class="option"><input type="radio" name="p1" value="c"> 2</label>
+                                <label class="option"><input type="radio" name="p1" value="d"> 3/4</label>
+                            </div>
+                            <div id="p1-feedback" class="answer-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question">
+                            <div class="question-text">Problem 2: What is ∫₀¹ ∫₀ˣ y dy dx? (variable upper limit x)</div>
+                            <div class="options">
+                                <label class="option"><input type="radio" name="p2" value="a"> 1/6</label>
+                                <label class="option"><input type="radio" name="p2" value="b"> 1/3</label>
+                                <label class="option"><input type="radio" name="p2" value="c"> 1/2</label>
+                                <label class="option"><input type="radio" name="p2" value="d"> 1/4</label>
+                            </div>
+                            <div id="p2-feedback" class="answer-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question">
+                            <div class="question-text">Problem 3: The volume of the solid under z = 1 and above the unit square [0,1]×[0,1] is:</div>
+                            <div class="options">
+                                <label class="option"><input type="radio" name="p3" value="a"> 2</label>
+                                <label class="option"><input type="radio" name="p3" value="b"> 1/2</label>
+                                <label class="option"><input type="radio" name="p3" value="c"> 1</label>
+                                <label class="option"><input type="radio" name="p3" value="d"> π</label>
+                            </div>
+                            <div id="p3-feedback" class="answer-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question">
+                            <div class="question-text">Problem 4: Evaluate ∫₀¹ ∫₀¹ ∫₀¹ xyz dz dy dx</div>
+                            <div class="options">
+                                <label class="option"><input type="radio" name="p4" value="a"> 1/4</label>
+                                <label class="option"><input type="radio" name="p4" value="b"> 1/8</label>
+                                <label class="option"><input type="radio" name="p4" value="c"> 1/2</label>
+                                <label class="option"><input type="radio" name="p4" value="d"> 3/8</label>
+                            </div>
+                            <div id="p4-feedback" class="answer-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question">
+                            <div class="question-text">Problem 5: In ∫₀¹ ∫₀ˣ ∫₀ˣ⁺ʸ dz dy dx, what is the upper limit of z in terms of the outer variables?</div>
+                            <div class="options">
+                                <label class="option"><input type="radio" name="p5" value="a"> Constant: z = 1</label>
+                                <label class="option"><input type="radio" name="p5" value="b"> Depends on x only: z = x</label>
+                                <label class="option"><input type="radio" name="p5" value="c"> Depends on both x and y: z = x + y</label>
+                                <label class="option"><input type="radio" name="p5" value="d"> Depends on y only: z = y</label>
+                            </div>
+                            <div id="p5-feedback" class="answer-feedback"></div>
+                        </div>
+                    </div>
+
+                    <button class="submit-btn" id="submit-posttest">
+                        <i class="fas fa-paper-plane"></i> Submit Posttest
+                    </button>
+                    <div id="posttest-results" style="display:none; margin-top:20px;"></div>
+
+                    <!-- Solutions -->
+                    <div class="theory-section" style="margin-top:35px;">
+                        <h3><i class="fas fa-check-circle"></i> Solutions to Posttest Problems</h3>
+
+                        <div class="example-box">
+                            <h4>Problem 1 Solution:</h4>
+                            <div class="equation">
+                                Inner: ∫₀¹ (x + y) dy = [xy + y²/2]₀¹ = x + 1/2<br>
+                                Outer: ∫₀¹ (x + 1/2) dx = [x²/2 + x/2]₀¹ = 1/2 + 1/2 = <strong>1</strong>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <h4>Problem 2 Solution:</h4>
+                            <div class="equation">
+                                Inner: ∫₀ˣ y dy = [y²/2]₀ˣ = x²/2<br>
+                                Outer: ∫₀¹ x²/2 dx = [x³/6]₀¹ = <strong>1/6</strong>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <h4>Problem 3 Solution:</h4>
+                            <div class="equation">
+                                ∫₀¹ ∫₀¹ 1 dy dx = ∫₀¹ [y]₀¹ dx = ∫₀¹ 1 dx = <strong>1</strong>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <h4>Problem 4 Solution:</h4>
+                            <div class="equation">
+                                Innermost: ∫₀¹ xyz dz = xy[z²/2]₀¹ = xy/2<br>
+                                Middle: ∫₀¹ xy/2 dy = x/2 · [y²/2]₀¹ = x/4<br>
+                                Outer: ∫₀¹ x/4 dx = [x²/8]₀¹ = <strong>1/8</strong>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <h4>Problem 5 Solution:</h4>
+                            <p>In ∫₀¹ ∫₀ˣ ∫₀<sup>x+y</sup> dz dy dx, the z-limits go from 0 to <strong>x+y</strong>, which is a function of both outer variables x and y. This is a <strong>variable limit</strong> depending on both x and y.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REFERENCES SECTION -->
+            <section id="references" class="content-section">
+                <h2 class="section-title">References & Further Reading</h2>
+
+                <div class="reference-item">
+                    <h4>Calculus: Early Transcendentals</h4>
+                    <p><strong>Author:</strong> James Stewart</p>
+                    <p><strong>Publisher:</strong> Cengage Learning</p>
+                    <p><strong>Topics:</strong> Multiple integrals, iterated integrals, variable limits, change of variables</p>
+                </div>
+
+                <div class="reference-item">
+                    <h4>Numerical Methods for Engineers</h4>
+                    <p><strong>Author:</strong> Steven C. Chapra, Raymond P. Canale</p>
+                    <p><strong>Publisher:</strong> McGraw-Hill Education</p>
+                    <p><strong>Topics:</strong> Numerical integration, Simpson's rule, Gaussian quadrature</p>
+                </div>
+
+                <div class="reference-item">
+                    <h4>Advanced Engineering Mathematics</h4>
+                    <p><strong>Author:</strong> Erwin Kreyszig</p>
+                    <p><strong>Publisher:</strong> Wiley</p>
+                    <p><strong>Topics:</strong> Double and triple integrals, coordinate systems, applications</p>
+                </div>
+
+                <div class="reference-item">
+                    <h4>Higher Engineering Mathematics</h4>
+                    <p><strong>Author:</strong> B.S. Grewal</p>
+                    <p><strong>Publisher:</strong> Khanna Publications</p>
+                    <p><strong>Topics:</strong> Multiple integrals with variable limits, engineering applications</p>
+                </div>
+
+                <div class="reference-item">
+                    <h4>Online Resources</h4>
+                    <p><strong>Khan Academy:</strong> Multivariable Calculus — free online tutorials on double and triple integrals</p>
+                    <p><strong>MIT OpenCourseWare:</strong> 18.02 Multivariable Calculus lectures (freely available)</p>
+                    <p><strong>Wolfram MathWorld:</strong> Comprehensive documentation on multiple integration</p>
+                    <p><strong>Paul's Online Math Notes:</strong> Detailed notes on double/triple integrals with examples</p>
+                </div>
+            </section>
+
+            <!-- CONTRIBUTORS SECTION -->
+            <section id="contributors" class="content-section">
+                <h2 class="section-title">Contributors</h2>
+                <p>This virtual lab experiment on Double and Triple Integration was developed by the following team:</p>
+
+                <div class="contributors-grid">
+                    <div class="contributor-card guide-card">
+                        <div class="contributor-role role-guide">Project Guide</div>
+                        <h3><i class="fas fa-chalkboard-teacher"></i> Rajesh Talekar</h3>
+                        <p><strong>Role:</strong> Project Guide &amp; Mentor</p>
+                        <p><strong>Department:</strong> Information Technology</p>
+                        <p><strong>Contributions:</strong> Academic guidance, concept validation, project supervision</p>
+                    </div>
+
+                    <div class="contributor-card leader-card">
+                        <div class="contributor-role role-leader">Team Leader</div>
+                        <h3><i class="fas fa-user-tie"></i> Abhishek Kumar</h3>
+                        <p><strong>Role:</strong> Team Leader &amp; Lead Developer</p>
+                        <p><strong>Contributions:</strong> System architecture, core development, numerical algorithms, project management</p>
+                    </div>
+
+                    <div class="contributor-card team-card">
+                        <div class="contributor-role role-member">Development Team</div>
+                        <h3><i class="fas fa-code"></i> Krushna Jadhav</h3>
+                        <p><strong>Role:</strong> Frontend Developer</p>
+                        <p><strong>Contributions:</strong> UI/UX design, interactive simulation components, graphical visualizations, styling</p>
+                    </div>
+
+                    <div class="contributor-card team-card">
+                        <div class="contributor-role role-member">Development Team</div>
+                        <h3><i class="fas fa-laptop-code"></i> Sakshi Walkulwad</h3>
+                        <p><strong>Role:</strong> Backend Developer &amp; Content Specialist</p>
+                        <p><strong>Contributions:</strong> Algorithm implementation, theory content, testing, documentation, deployment</p>
+                    </div>
+                </div>
+
+                <div class="theory-section" style="margin-top:35px;">
+                    <h3><i class="fas fa-handshake"></i> Acknowledgements</h3>
+                    <p>This virtual lab was developed as part of the Virtual Labs initiative to enhance online learning in numerical methods and multi-variable calculus.</p>
+                    <p>Special thanks to all faculty members and students who provided valuable feedback during development and testing phases.</p>
+                    <p style="margin-top:12px; font-style:italic; color:#7f8c8d;">For contributions, suggestions, or collaboration opportunities, please use the Feedback tab.</p>
+                </div>
+            </section>
+
+            <!-- FEEDBACK SECTION -->
+            <section id="feedback" class="content-section">
+                <h2 class="section-title">Feedback</h2>
+                <div class="feedback-content">
+                    <p style="margin-bottom:22px; color:#7f8c8d;">Your feedback helps us improve this virtual lab. Please share your experience!</p>
+
+                    <form id="feedback-form">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="rating">Overall Rating:</label>
+                            <select id="rating">
+                                <option value="">Select rating...</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                <option value="4">⭐⭐⭐⭐ Good</option>
+                                <option value="3">⭐⭐⭐ Average</option>
+                                <option value="2">⭐⭐ Below Average</option>
+                                <option value="1">⭐ Poor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject:</label>
+                            <input type="text" id="subject" placeholder="Enter subject of your feedback">
+                        </div>
+                        <div class="form-group">
+                            <label for="comments">Comments and Suggestions:</label>
+                            <textarea id="comments" rows="5" placeholder="Please provide your detailed feedback here..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="send-copy">
+                                <input type="checkbox" id="send-copy" checked style="width:auto; margin-right:8px;">
+                                Send a copy to my email
+                            </label>
+                        </div>
+                        <button type="submit" id="submit-feedback" class="btn btn-solve" style="width:auto; padding:12px 28px;">
+                            <i class="fas fa-paper-plane"></i> Submit Feedback
+                        </button>
+                    </form>
+
+                    <div id="feedback-status" style="margin-top:18px; padding:14px; border-radius:8px; display:none;"></div>
+                </div>
+            </section>
+
+        </div><!-- end content-area -->
+    </div><!-- end main-content -->
+
+<script>
+    // ========== NAVIGATION ==========
+    const sectionTitles = {
+        'aim':          'Double and Triple Integration',
+        'pretest':      'Pretest — Assess Your Knowledge',
+        'theory':       'Theory of Double & Triple Integration',
+        'simulation':   'Simulation — Evaluate Integrals',
+        'posttest':     'Posttest — Practical Problems',
+        'references':   'References',
+        'contributors': 'Contributors',
+        'feedback':     'Feedback'
+    };
+
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            this.classList.add('active');
+            const tabId = this.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('section-header').textContent = sectionTitles[tabId] || tabId;
+        });
+    });
+
+    // ========== MATH PARSER ==========
+    function parseExpr(expr) {
+        let e = expr.trim()
+            .replace(/\^/g, '**')
+            .replace(/sin/g,'Math.sin')
+            .replace(/cos/g,'Math.cos')
+            .replace(/tan/g,'Math.tan')
+            .replace(/exp/g,'Math.exp')
+            .replace(/sqrt/g,'Math.sqrt')
+            .replace(/log/g,'Math.log')
+            .replace(/pi/g,'Math.PI')
+            .replace(/abs/g,'Math.abs');
+        try {
+            return new Function('x','y','z', `"use strict"; return (${e});`);
+        } catch(err) {
+            return null;
+        }
+    }
+
+    // ========== INTEGRAL UI ==========
+    function updateIntegralUI() {
+        const type = document.getElementById('integral-type').value;
+        const zBlock = document.getElementById('z-limits-block');
+        zBlock.style.display = type === 'triple' ? 'block' : 'none';
+
+        const integrandInput = document.getElementById('integrand');
+        if (type === 'triple') {
+            integrandInput.placeholder = 'e.g. x*y*z, x^2+y^2+z^2';
+            if (integrandInput.value === 'x*y') integrandInput.value = 'x*y*z';
+        } else {
+            integrandInput.placeholder = 'e.g. x*y, x^2+y^2';
+            if (integrandInput.value === 'x*y*z') integrandInput.value = 'x*y';
+        }
+    }
+
+    // ========== EXAMPLES ==========
+    function loadExample() {
+        const type = document.getElementById('integral-type').value;
+        if (type === 'double') {
+            document.getElementById('integrand').value = 'x*y';
+            document.getElementById('x-lower').value = '0';
+            document.getElementById('x-upper').value = '1';
+            document.getElementById('y-lower').value = '0';
+            document.getElementById('y-upper').value = 'x';
+            showMessage('Loaded: ∫₀¹ ∫₀ˣ xy dy dx (variable upper limit)', 'success');
+        } else {
+            document.getElementById('integrand').value = 'x*y*z';
+            document.getElementById('x-lower').value = '0';
+            document.getElementById('x-upper').value = '1';
+            document.getElementById('y-lower').value = '0';
+            document.getElementById('y-upper').value = 'x';
+            document.getElementById('z-lower').value = '0';
+            document.getElementById('z-upper').value = 'x+y';
+            showMessage('Loaded: ∫₀¹ ∫₀ˣ ∫₀ˣ⁺ʸ xyz dz dy dx (variable limits)', 'success');
+        }
+    }
+
+    // ========== RESET ==========
+    function resetAll() {
+        document.getElementById('integrand').value = 'x*y';
+        document.getElementById('x-lower').value = '0';
+        document.getElementById('x-upper').value = '1';
+        document.getElementById('y-lower').value = '0';
+        document.getElementById('y-upper').value = 'x';
+        document.getElementById('z-lower').value = '0';
+        document.getElementById('z-upper').value = '1';
+        document.getElementById('integral-type').value = 'double';
+        updateIntegralUI();
+
+        document.getElementById('solution-status').textContent = 'Ready';
+        document.getElementById('solution-status').className = 'solution-status';
+        document.getElementById('solution-display').innerHTML = `
+            <p style="text-align:center; color:#bdc3c7; padding:30px 10px;">
+                <i class="fas fa-integral" style="font-size:2.5rem; display:block; margin-bottom:12px;"></i>
+                Configure the integral and click "Compute Integral" to see the result
+            </p>`;
+        document.getElementById('steps-container').innerHTML = '';
+        document.getElementById('integral-notation').style.display = 'none';
+        document.getElementById('prop-type').textContent = '—';
+        document.getElementById('prop-method').textContent = 'Midpoint Rule';
+        document.getElementById('prop-varlimits').textContent = '—';
+
+        const graphCanvas = document.getElementById('graph-canvas');
+        graphCanvas.innerHTML = '';
+        const ph = document.createElement('div');
+        ph.className = 'graph-placeholder';
+        ph.id = 'graph-placeholder';
+        ph.innerHTML = '<i class="fas fa-chart-area" style="font-size:2.5rem; margin-bottom:12px;"></i><p>Integration region and function will appear here</p>';
+        graphCanvas.appendChild(ph);
+        document.getElementById('graph-legend').innerHTML = '';
+    }
+
+    // ========== MAIN COMPUTE (Simplified - Midpoint Rule only) ==========
+    function computeIntegral() {
+        const type = document.getElementById('integral-type').value;
+        const integrandStr = document.getElementById('integrand').value.trim();
+
+        const xaStr = document.getElementById('x-lower').value.trim();
+        const xbStr = document.getElementById('x-upper').value.trim();
+        const ycStr = document.getElementById('y-lower').value.trim();
+        const ydStr = document.getElementById('y-upper').value.trim();
+
+        const xa = safeEvalConst(xaStr);
+        const xb = safeEvalConst(xbStr);
+
+        if (xa === null || xb === null) {
+            showMessage('x-limits must be numeric constants (e.g. 0, 1, pi)', 'error');
+            return;
+        }
+
+        if (xa >= xb) {
+            showMessage('x upper limit must be greater than lower limit', 'error');
+            return;
+        }
+
+        const ycFn = parseExprXYZ(ycStr);
+        const ydFn = parseExprXYZ(ydStr);
+        const fFn = parseExpr(integrandStr);
+
+        if (!fFn || !ycFn || !ydFn) {
+            showMessage('Invalid expression — check integrand or limits', 'error');
+            return;
+        }
+
+        const yHasVar = /[xy]/.test(ycStr) || /[xy]/.test(ydStr);
+        let zHasVar = false;
+        let result, steps;
+
+        const n = 40; // fixed internal resolution
+
+        if (type === 'double') {
+            try {
+                const out = computeDouble(fFn, xa, xb, ycFn, ydFn, n);
+                result = out.value;
+                steps = out.steps;
+            } catch(e) {
+                showMessage('Computation error: ' + e.message, 'error');
+                return;
+            }
+        } else {
+            const zeStr = document.getElementById('z-lower').value.trim();
+            const zfStr = document.getElementById('z-upper').value.trim();
+            const zeFn = parseExprXYZ(zeStr);
+            const zfFn = parseExprXYZ(zfStr);
+            zHasVar = /[xy]/.test(zeStr) || /[xy]/.test(zfStr);
+
+            if (!zeFn || !zfFn) {
+                showMessage('Invalid z-limit expression', 'error');
+                return;
+            }
+
+            try {
+                const out = computeTriple(fFn, xa, xb, ycFn, ydFn, zeFn, zfFn, n);
+                result = out.value;
+                steps = out.steps;
+            } catch(e) {
+                showMessage('Computation error: ' + e.message, 'error');
+                return;
+            }
+        }
+
+        if (isNaN(result) || !isFinite(result)) {
+            showMessage('Result is undefined or divergent — check your input', 'error');
+            return;
+        }
+
+        displayResult(result, type, n, yHasVar || zHasVar, steps, integrandStr, xa, xb, ycStr, ydStr);
+
+        if (type === 'double') {
+            drawDoubleGraph(fFn, xa, xb, ycFn, ydFn, integrandStr, result);
+        } else {
+            drawTripleInfo(result, integrandStr);
+        }
+
+        document.getElementById('prop-type').textContent = type === 'double' ? 'Double ∬' : 'Triple ∭';
+        document.getElementById('prop-varlimits').textContent = (yHasVar || zHasVar) ? 'Yes' : 'No (rectangular)';
+
+        setStatus('success', 'Computed Successfully');
+        showMessage(`Result: ${result.toFixed(8)}`, 'success');
+    }
+
+    function safeEvalConst(str) {
+        let e = str.trim()
+            .replace(/pi/g,'Math.PI')
+            .replace(/e\b/g,'Math.E');
+        try {
+            const val = new Function(`"use strict"; return (${e});`)();
+            return (typeof val === 'number' && isFinite(val)) ? val : null;
+        } catch { return null; }
+    }
+
+    function parseExprXYZ(expr) {
+        let e = expr.trim()
+            .replace(/\^/g,'**')
+            .replace(/sin/g,'Math.sin')
+            .replace(/cos/g,'Math.cos')
+            .replace(/tan/g,'Math.tan')
+            .replace(/exp/g,'Math.exp')
+            .replace(/sqrt/g,'Math.sqrt')
+            .replace(/log/g,'Math.log')
+            .replace(/pi/g,'Math.PI')
+            .replace(/abs/g,'Math.abs');
+        try {
+            return new Function('x','y','z', `"use strict"; return (${e});`);
+        } catch { return null; }
+    }
+
+    // ========== DOUBLE INTEGRAL (Midpoint only) ==========
+    function computeDouble(f, xa, xb, ycFn, ydFn, n) {
+        const steps = [];
+        steps.push({ title: 'Setup', body: `Outer x: [${xa}, ${xb}]   Inner y: [g₁(x), g₂(x)]` });
+
+        let sum = 0;
+        const hx = (xb - xa) / n;
+        for (let i = 0; i < n; i++) {
+            const xi = xa + (i + 0.5) * hx;
+            const yc = ycFn(xi, 0, 0);
+            const yd = ydFn(xi, 0, 0);
+            const hy = (yd - yc) / n;
+            let innerSum = 0;
+            for (let j = 0; j < n; j++) {
+                const yj = yc + (j + 0.5) * hy;
+                innerSum += f(xi, yj, 0);
+            }
+            sum += innerSum * hy;
+        }
+        const result = sum * hx;
+
+        steps.push({ title: 'Midpoint Rule', body: `Applied composite midpoint rule with ${n} subdivisions per dimension` });
+        steps.push({ title: 'Result', body: `∬ f dA ≈ ${result.toFixed(10)}` });
+        return { value: result, steps };
+    }
+
+    // ========== TRIPLE INTEGRAL (Midpoint only) ==========
+    function computeTriple(f, xa, xb, ycFn, ydFn, zeFn, zfFn, n) {
+        const steps = [];
+        steps.push({ title: 'Setup', body: `x: [${xa}, ${xb}]   y: [g₁(x), g₂(x)]   z: [h₁(x,y), h₂(x,y)]` });
+
+        const m = Math.max(8, Math.floor(n / 4));
+        let result = 0;
+        const hx = (xb - xa) / m;
+
+        for (let i = 0; i < m; i++) {
+            const xi = xa + (i + 0.5) * hx;
+            const yc = ycFn(xi, 0, 0);
+            const yd = ydFn(xi, 0, 0);
+            const hy = (yd - yc) / m;
+            for (let j = 0; j < m; j++) {
+                const yj = yc + (j + 0.5) * hy;
+                const ze = zeFn(xi, yj, 0);
+                const zf = zfFn(xi, yj, 0);
+                const hz = (zf - ze) / m;
+                for (let k = 0; k < m; k++) {
+                    const zk = ze + (k + 0.5) * hz;
+                    result += f(xi, yj, zk) * hx * hy * hz;
+                }
+            }
+        }
+
+        steps.push({ title: 'Midpoint Rule (3D)', body: `Applied midpoint rule with ${m} subdivisions per dimension` });
+        steps.push({ title: 'Result', body: `∭ f dV ≈ ${result.toFixed(10)}` });
+        return { value: result, steps };
+    }
+
+    // ========== DISPLAY RESULT ==========
+    function displayResult(result, type, n, varLimits, steps, integrandStr, xa, xb, ycStr, ydStr) {
+        const notation = document.getElementById('integral-notation');
+        notation.style.display = 'flex';
+        if (type === 'double') {
+            notation.innerHTML = `
+                <span class="integral-symbol">∬</span>
+                <div style="line-height:1.5;">
+                    <div><strong>${integrandStr}</strong> dA</div>
+                    <div style="font-size:0.78rem; color:#7f8c8d;">
+                        x ∈ [${xa}, ${xb}],&nbsp;&nbsp;
+                        y ∈ [<span class="variable-badge">${ycStr}</span>,&nbsp;<span class="variable-badge">${ydStr}</span>]
+                    </div>
+                </div>
+            `;
+        } else {
+            const zeStr = document.getElementById('z-lower').value;
+            const zfStr = document.getElementById('z-upper').value;
+            notation.innerHTML = `
+                <span class="integral-symbol">∭</span>
+                <div style="line-height:1.5;">
+                    <div><strong>${integrandStr}</strong> dV</div>
+                    <div style="font-size:0.78rem; color:#7f8c8d;">
+                        x ∈ [${xa}, ${xb}],&nbsp;
+                        y ∈ [<span class="variable-badge">${ycStr}</span>,&nbsp;<span class="variable-badge">${ydStr}</span>],&nbsp;
+                        z ∈ [<span class="variable-badge">${zeStr}</span>,&nbsp;<span class="variable-badge">${zfStr}</span>]
+                    </div>
+                </div>
+            `;
+        }
+
+        const sol = document.getElementById('solution-display');
+        sol.innerHTML = `
+            <div class="result-label">Numerical Result (Midpoint Rule)</div>
+            <div class="result-value">${result.toFixed(8)}</div>
+            <div style="font-size:0.82rem; color:#7f8c8d; margin-top:5px;">
+                ≈ ${result.toExponential(4)}
+            </div>
+            ${varLimits ? `<div style="margin-top:12px; padding:10px; background:#e8f4fd; border-radius:6px; font-size:0.85rem; color:#1e5799;">
+                <i class="fas fa-info-circle"></i> Variable limits detected — integration performed over non-rectangular region
+            </div>` : ''}
+        `;
+
+        const stepsDiv = document.getElementById('steps-container');
+        stepsDiv.innerHTML = '<div style="font-weight:600; color:#1e3c72; margin-bottom:10px; font-size:0.95rem;">Computation Steps</div>';
+        steps.forEach(s => {
+            const div = document.createElement('div');
+            div.className = 'step';
+            div.innerHTML = `<div class="step-title">${s.title}</div><div>${s.body}</div>`;
+            stepsDiv.appendChild(div);
+        });
+    }
+
+    function setStatus(type, msg) {
+        const el = document.getElementById('solution-status');
+        el.textContent = msg;
+        el.className = `solution-status status-${type}`;
+    }
+
+    // ========== GRAPH ==========
+    function drawDoubleGraph(f, xa, xb, ycFn, ydFn, integrandStr, result) {
+        const canvas = document.getElementById('graph-canvas');
+        const legend = document.getElementById('graph-legend');
+        const ph = document.getElementById('graph-placeholder');
+        if (ph) ph.style.display = 'none';
+        canvas.innerHTML = '';
+        legend.innerHTML = '';
+
+        const W = canvas.clientWidth || 600;
+        const H = canvas.clientHeight || 280;
+        const pad = 50;
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+        svg.setAttribute('width', W);
+        svg.setAttribute('height', H);
+        svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+        canvas.appendChild(svg);
+
+        const gW = W - 2*pad, gH = H - 2*pad;
+        const xRange = xb - xa;
+        const sx = v => pad + (v - xa) / xRange * gW;
+
+        const yVals = [];
+        for (let i = 0; i <= 30; i++) {
+            const xi = xa + i * xRange / 30;
+            yVals.push(ycFn(xi,0,0));
+            yVals.push(ydFn(xi,0,0));
+        }
+        const yMin = Math.min(...yVals);
+        const yMax = Math.max(...yVals);
+        const yRange = (yMax - yMin) || 1;
+        const sy = v => H - pad - (v - yMin) / yRange * gH;
+
+        const drawLine = (x1,y1,x2,y2,stroke,sw=1,dash='none') => {
+            const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+            l.setAttribute('x1',x1); l.setAttribute('y1',y1);
+            l.setAttribute('x2',x2); l.setAttribute('y2',y2);
+            l.setAttribute('stroke',stroke); l.setAttribute('stroke-width',sw);
+            if (dash !== 'none') l.setAttribute('stroke-dasharray',dash);
+            svg.appendChild(l);
+        };
+
+        drawLine(pad, H-pad, W-pad, H-pad, '#2c3e50', 2);
+        drawLine(pad, pad, pad, H-pad, '#2c3e50', 2);
+
+        const labelTxt = (x,y,txt,fill='#7f8c8d',size=11,anchor='middle') => {
+            const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+            t.setAttribute('x',x); t.setAttribute('y',y);
+            t.setAttribute('fill',fill); t.setAttribute('font-size',size);
+            t.setAttribute('text-anchor',anchor);
+            t.textContent = txt;
+            svg.appendChild(t);
+        };
+
+        labelTxt(W-pad+15, H-pad+4, 'x', '#2c3e50', 13);
+        labelTxt(pad-15, pad-8, 'y', '#2c3e50', 13);
+
+        for (let i = 0; i <= 4; i++) {
+            const xv = xa + i * xRange / 4;
+            const sx_ = sx(xv);
+            drawLine(sx_, H-pad-4, sx_, H-pad+4, '#7f8c8d', 1);
+            labelTxt(sx_, H-pad+16, xv.toFixed(2), '#7f8c8d', 10);
+        }
+        for (let i = 0; i <= 4; i++) {
+            const yv = yMin + i * yRange / 4;
+            const sy_ = sy(yv);
+            drawLine(pad-4, sy_, pad+4, sy_, '#7f8c8d', 1);
+            labelTxt(pad-8, sy_+4, yv.toFixed(2), '#7f8c8d', 10, 'end');
+        }
+
+        const N = 60;
+        let regionPath = `M ${sx(xa)} ${sy(ycFn(xa,0,0))}`;
+        for (let i = 0; i <= N; i++) {
+            const xi = xa + i * xRange / N;
+            regionPath += ` L ${sx(xi)} ${sy(ydFn(xi,0,0))}`;
+        }
+        for (let i = N; i >= 0; i--) {
+            const xi = xa + i * xRange / N;
+            regionPath += ` L ${sx(xi)} ${sy(ycFn(xi,0,0))}`;
+        }
+        regionPath += ' Z';
+        const region = document.createElementNS('http://www.w3.org/2000/svg','path');
+        region.setAttribute('d', regionPath);
+        region.setAttribute('fill', 'rgba(41,128,185,0.2)');
+        region.setAttribute('stroke', 'rgba(41,128,185,0.6)');
+        region.setAttribute('stroke-width', '1');
+        svg.appendChild(region);
+
+        let upperPath = `M ${sx(xa)} ${sy(ydFn(xa,0,0))}`;
+        for (let i = 1; i <= N; i++) {
+            const xi = xa + i * xRange / N;
+            upperPath += ` L ${sx(xi)} ${sy(ydFn(xi,0,0))}`;
+        }
+        const upper = document.createElementNS('http://www.w3.org/2000/svg','path');
+        upper.setAttribute('d', upperPath);
+        upper.setAttribute('fill', 'none');
+        upper.setAttribute('stroke', '#e74c3c');
+        upper.setAttribute('stroke-width', '2.5');
+        svg.appendChild(upper);
+
+        let lowerPath = `M ${sx(xa)} ${sy(ycFn(xa,0,0))}`;
+        for (let i = 1; i <= N; i++) {
+            const xi = xa + i * xRange / N;
+            lowerPath += ` L ${sx(xi)} ${sy(ycFn(xi,0,0))}`;
+        }
+        const lower = document.createElementNS('http://www.w3.org/2000/svg','path');
+        lower.setAttribute('d', lowerPath);
+        lower.setAttribute('fill', 'none');
+        lower.setAttribute('stroke', '#3498db');
+        lower.setAttribute('stroke-width', '2.5');
+        svg.appendChild(lower);
+
+        labelTxt(W/2, 20, `Integration region for ∬(${integrandStr}) dA`, '#1e3c72', 12);
+
+        legend.innerHTML = `
+            <div class="legend-item"><div class="legend-color color-line1"></div><span>Upper boundary: y = ${document.getElementById('y-upper').value}</span></div>
+            <div class="legend-item"><div class="legend-color color-line2"></div><span>Lower boundary: y = ${document.getElementById('y-lower').value}</span></div>
+            <div class="legend-item"><div class="legend-color color-area"></div><span>Integration region (Result ≈ ${result.toFixed(6)})</span></div>
+        `;
+    }
+
+    function drawTripleInfo(result, integrandStr) {
+        const canvas = document.getElementById('graph-canvas');
+        const ph = document.getElementById('graph-placeholder');
+        if (ph) ph.style.display = 'none';
+        canvas.innerHTML = '';
+        canvas.innerHTML = `
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; padding:20px; text-align:center;">
+                <i class="fas fa-cube" style="font-size:3rem; color:#2a5298; margin-bottom:16px; opacity:0.7;"></i>
+                <div style="font-size:1rem; font-weight:700; color:#1e3c72; margin-bottom:8px;">3D Integration Region</div>
+                <div style="font-family:'Courier New',monospace; font-size:1.4rem; color:#2a5298; margin:10px 0;">
+                    ∭(${integrandStr}) dV ≈ <strong style="color:#e74c3c;">${result.toFixed(8)}</strong>
+                </div>
+                <div style="font-size:0.85rem; color:#7f8c8d; max-width:400px; margin-top:10px;">
+                    3D regions are computed with midpoint rule. Visual rendering limited to 2D.
+                </div>
+            </div>
+        `;
+        document.getElementById('graph-legend').innerHTML = `
+            <div class="legend-item"><div class="legend-color color-line1"></div><span>Integrand: ${integrandStr}</span></div>
+            <div class="legend-item"><div class="legend-color color-solution"></div><span>Result ≈ ${result.toFixed(8)}</span></div>
+        `;
+    }
+
+    // ========== QUIZ LOGIC ==========
+    const pretestAnswers = { q1:'b', q2:'b', q3:'b', q4:'c', q5:'c' };
+    const posttestAnswers = { p1:'a', p2:'a', p3:'c', p4:'b', p5:'c' };
+
+    const pretestExplanations = {
+        q1: 'A double integral ∬f(x,y) dA gives the volume of the solid between z = f(x,y) and the region A in the xy-plane.',
+        q2: 'In ∫∫ f(x,y) dy dx, y is the inner variable and is integrated first.',
+        q3: '∫(2x + 3) dx from 0 to 1 = [x² + 3x] from 0 to 1 = (1 + 3) - 0 = 4',
+        q4: 'The y-limits go from 0 to x — since x is the outer variable, these are variable limits depending on x.',
+        q5: '∭ dV simply sums infinitesimal volume elements, yielding the total volume of region R.'
+    };
+
+    const posttestExplanations = {
+        p1: '∫₀¹ (x+1/2)dx = 1/2 + 1/2 = 1',
+        p2: 'Inner ∫₀ˣ y dy = x²/2; Outer ∫₀¹ x²/2 dx = 1/6',
+        p3: '∫₀¹∫₀¹ 1 dy dx = 1 (area of unit square = volume under z=1)',
+        p4: 'Each integral halves the result: (1/2)(1/2)(1/2) = 1/8',
+        p5: 'The innermost upper limit is x+y — a function of both outer variables x and y.'
+    };
+
+    function initOptions() {
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.addEventListener('click', function(e) {
+                if (e.target.type === 'radio') return;
+                const radio = this.querySelector('input[type="radio"]');
+                if (!radio) return;
+                radio.checked = true;
+                const allOpts = this.closest('.options').querySelectorAll('.option');
+                allOpts.forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                showFeedback(radio.name, radio.value);
+            });
+        });
+        document.querySelectorAll('input[type="radio"]').forEach(r => {
+            r.addEventListener('click', function() {
+                const opt = this.closest('.option');
+                const allOpts = opt.closest('.options').querySelectorAll('.option');
+                allOpts.forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                showFeedback(this.name, this.value);
+            });
+        });
+    }
+
+    function showFeedback(name, value) {
+        const isPretest = name.startsWith('q');
+        const answers = isPretest ? pretestAnswers : posttestAnswers;
+        const explanations = isPretest ? pretestExplanations : posttestExplanations;
+        const fb = document.getElementById(`${name}-feedback`);
+        if (!fb) return;
+        const correct = value === answers[name];
+        fb.innerHTML = `<i class="fas fa-${correct ? 'check' : 'times'}-circle"></i> <strong>${correct ? 'Correct!' : 'Incorrect.'}</strong> ${explanations[name]}`;
+        fb.className = `answer-feedback ${correct ? 'feedback-correct' : 'feedback-incorrect'}`;
+        fb.style.display = 'block';
+    }
+
+    function submitTest(prefix, answers, total, resultsId) {
+        let score = 0;
+        for (let i = 1; i <= total; i++) {
+            const sel = document.querySelector(`input[name="${prefix}${i}"]:checked`);
+            if (sel && sel.value === answers[`${prefix}${i}`]) score++;
+        }
+        const pct = Math.round(score / total * 100);
+        const msg = pct >= 80 ? 'Excellent! You have a strong grasp of the concepts.' :
+                    pct >= 60 ? 'Good job! Review the sections you found difficult.' :
+                    'Study the Theory and Simulation sections to strengthen your understanding.';
+        const div = document.getElementById(resultsId);
+        div.innerHTML = `
+            <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:10px; border-left:5px solid #2a5298;">
+                <div class="score-circle"><div class="score-value">${score}/${total}</div><div class="score-label">Score</div></div>
+                <h3 style="color:#1e3c72; margin-bottom:8px;">${pct >= 80 ? 'Excellent!' : pct >= 60 ? 'Well Done!' : 'Keep Learning!'}</h3>
+                <p>You scored <strong>${pct}%</strong></p>
+                <p style="color:#7f8c8d; margin-top:8px;">${msg}</p>
+            </div>`;
+        div.style.display = 'block';
+        div.scrollIntoView({ behavior: 'smooth' });
+        showMessage(`Submitted! Score: ${score}/${total}`, 'success');
+    }
+
+    // ========== FEEDBACK ==========
+    function initFeedback() {
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const comments = document.getElementById('comments').value.trim();
+            if (!comments) { showMessage('Please provide comments before submitting.', 'error'); return; }
+
+            const btn = document.getElementById('submit-feedback');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            btn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value || 'Anonymous');
+            formData.append('email', document.getElementById('email').value || '');
+            formData.append('rating', document.getElementById('rating').value || 'Not rated');
+            formData.append('subject', document.getElementById('subject').value || 'Feedback — Double & Triple Integration Lab');
+            formData.append('comments', comments);
+            formData.append('_subject', 'Virtual Labs Feedback: Double & Triple Integration');
+
+            fetch('https://formspree.io/f/mojaonbz', {
+                method: 'POST', body: formData, headers: { 'Accept': 'application/json' }
+            }).then(r => {
+                const statusDiv = document.getElementById('feedback-status');
+                if (r.ok) {
+                    statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> <strong>Thank you!</strong> Feedback submitted successfully.';
+                    statusDiv.style.cssText = 'display:block; background:#d5f4e6; color:#1a7a4a; border-left:5px solid #27ae60; padding:14px; border-radius:8px; margin-top:15px;';
+                    this.reset();
+                } else {
+                    statusDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Submission failed. Please try again.';
+                    statusDiv.style.cssText = 'display:block; background:#fadbd8; color:#922b21; border-left:5px solid #e74c3c; padding:14px; border-radius:8px; margin-top:15px;';
+                }
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Feedback';
+                btn.disabled = false;
+            }).catch(() => {
+                showMessage('Network error. Please check your connection.', 'error');
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Feedback';
+                btn.disabled = false;
+            });
+        });
+    }
+
+    // ========== TOAST ==========
+    function showMessage(msg, type) {
+        const old = document.getElementById('toast-msg');
+        if (old) old.remove();
+        const el = document.createElement('div');
+        el.id = 'toast-msg';
+        const colors = { success: '#27ae60', error: '#e74c3c', warning: '#f39c12' };
+        const bgs = { success: '#d5f4e6', error: '#fadbd8', warning: '#fdebd0' };
+        el.style.cssText = `position:fixed; top:100px; right:28px; padding:13px 22px; border-radius:8px;
+            font-weight:600; z-index:9999; box-shadow:0 5px 15px rgba(0,0,0,0.12);
+            transition:all 0.3s; max-width:320px; font-size:0.9rem;
+            background:${bgs[type]}; color:${colors[type]}; border-left:5px solid ${colors[type]};`;
+        const icons = { success:'check-circle', error:'times-circle', warning:'exclamation-triangle' };
+        el.innerHTML = `<i class="fas fa-${icons[type]}"></i> ${msg}`;
+        document.body.appendChild(el);
+        setTimeout(() => { el.style.opacity='0'; el.style.transform='translateX(80px)'; setTimeout(() => el.remove(), 320); }, 3200);
+    }
+
+    // ========== INIT ==========
+    document.addEventListener('DOMContentLoaded', () => {
+        initOptions();
+        initFeedback();
+        document.getElementById('submit-pretest').addEventListener('click', () => submitTest('q', pretestAnswers, 5, 'pretest-results'));
+        document.getElementById('submit-posttest').addEventListener('click', () => submitTest('p', posttestAnswers, 5, 'posttest-results'));
+    });
+</script>
+</body>
+</html>
